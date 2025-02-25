@@ -12,20 +12,20 @@ import animationSettings from './objects/animationSettings'
 // The order here is crucial - dependencies must be registered before
 // the types that use them
 export const schemaTypes = [
-  // Base types with no dependencies
+  // Base types first
   containerStyle,
   animationSettings,
   backgroundSettings,
 
-  // Content block types (depend on animation/container styles)
+  // Content blocks next
   textBlock,
   imageBlock,
   videoBlock,
   customBlock,
 
-  // Section type (depends on content blocks)
+  // Section type that depends on content blocks
   storySection,
 
-  // Document type (depends on sections)
+  // Document type that depends on sections
   story,
 ]

@@ -1,118 +1,34 @@
-// studio/studio/schemaTypes/objects/videoBlock.ts
+// studio/schemaTypes/objects/imageBlock.ts
 export default {
-  name: 'videoBlock',
-  title: 'Video Block',
+  name: 'imageBlock',
+  title: 'Image Block',
   type: 'object',
   fields: [
     {
-      name: 'videoType',
-      title: 'Video Type',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'File Upload', value: 'file'},
-          {title: 'YouTube', value: 'youtube'},
-          {title: 'Vimeo', value: 'vimeo'},
-        ],
-      },
-      initialValue: 'file',
-    },
-    {
-      name: 'video',
-      title: 'Video File',
-      type: 'file',
-      options: {
-        accept: 'video/*',
-      },
-      hidden: ({parent}: {parent: {videoType: string}}) => parent?.videoType !== 'file',
-      validation: (Rule: any) =>
-        Rule.custom((value: any, context: any) => {
-          const {parent} = context
-          if (parent?.videoType === 'file' && !value) {
-            return 'Required'
-          }
-          return true
-        }),
-    },
-    {
-      name: 'youtubeUrl',
-      title: 'YouTube URL',
-      type: 'url',
-      hidden: ({parent}: {parent: {videoType: string}}) => parent?.videoType !== 'youtube',
-      validation: (Rule: any) =>
-        Rule.custom((value: any, context: any) => {
-          const {parent} = context
-          if (parent?.videoType === 'youtube' && !value) {
-            return 'Required'
-          }
-          if (value && !value.includes('youtube.com') && !value.includes('youtu.be')) {
-            return 'Must be a valid YouTube URL'
-          }
-          return true
-        }),
-    },
-    {
-      name: 'vimeoUrl',
-      title: 'Vimeo URL',
-      type: 'url',
-      hidden: ({parent}: {parent: {videoType: string}}) => parent?.videoType !== 'vimeo',
-      validation: (Rule: any) =>
-        Rule.custom((value: any, context: any) => {
-          const {parent} = context
-          if (parent?.videoType === 'vimeo' && !value) {
-            return 'Required'
-          }
-          if (value && !value.includes('vimeo.com')) {
-            return 'Must be a valid Vimeo URL'
-          }
-          return true
-        }),
-    },
-    {
-      name: 'poster',
-      title: 'Poster Image',
+      name: 'image',
+      title: 'Image',
       type: 'image',
-      description: 'Displayed while the video is loading or before it plays',
       options: {
         hotspot: true,
       },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'alt',
+      title: 'Alternative Text',
+      type: 'string',
+      description: 'Important for SEO and accessibility. Describe the image in a few words.',
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'caption',
       title: 'Caption',
       type: 'string',
-      description: 'Optional caption to display below the video',
-    },
-    {
-      name: 'autoplay',
-      title: 'Autoplay',
-      type: 'boolean',
-      initialValue: false,
-      description:
-        'Start playing automatically when the section appears (may be blocked by browsers)',
-    },
-    {
-      name: 'loop',
-      title: 'Loop',
-      type: 'boolean',
-      initialValue: false,
-    },
-    {
-      name: 'muted',
-      title: 'Muted',
-      type: 'boolean',
-      initialValue: true,
-      description: 'Start with sound off (recommended for autoplay)',
-    },
-    {
-      name: 'controls',
-      title: 'Show Controls',
-      type: 'boolean',
-      initialValue: true,
+      description: 'Optional caption to display below the image',
     },
     {
       name: 'size',
-      title: 'Video Size',
+      title: 'Image Size',
       type: 'string',
       options: {
         list: [
@@ -129,30 +45,14 @@ export default {
       name: 'customWidth',
       title: 'Custom Width (%, px, rem)',
       type: 'string',
-      hidden: ({parent}: {parent: {size: string}}) => parent?.size !== 'custom',
+      hidden: ({parent}) => parent?.size !== 'custom',
     },
     {
       name: 'customHeight',
       title: 'Custom Height (%, px, rem, auto)',
       type: 'string',
-      hidden: ({parent}: {parent: {size: string}}) => parent?.size !== 'custom',
-    },
-    {
-      name: 'aspectRatio',
-      title: 'Aspect Ratio',
-      type: 'string',
-      options: {
-        list: [
-          {title: '16:9', value: '16:9'},
-          {title: '4:3', value: '4:3'},
-          {title: '1:1', value: '1:1'},
-          {title: '9:16', value: '9:16'},
-          {title: 'Custom', value: 'custom'},
-        ],
-      },
-      initialValue: '16:9',
-      hidden: ({parent}: {parent: {size: string}}) =>
-        parent?.size === 'custom' && parent?.customHeight && parent?.customHeight !== 'auto',
+      hidden: ({parent}) => parent?.size !== 'custom',
+      initialValue: 'auto',
     },
     {
       name: 'position',
@@ -168,6 +68,20 @@ export default {
       initialValue: 'center',
     },
     {
+      name: 'objectFit',
+      title: 'Object Fit',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Cover', value: 'cover'},
+          {title: 'Contain', value: 'contain'},
+          {title: 'Fill', value: 'fill'},
+          {title: 'None', value: 'none'},
+        ],
+      },
+      initialValue: 'cover',
+    },
+    {
       name: 'containerStyle',
       title: 'Container Style',
       type: 'containerStyle',
@@ -177,19 +91,32 @@ export default {
       title: 'Animation',
       type: 'animationSettings',
     },
+    {
+      name: 'link',
+      title: 'Link',
+      type: 'url',
+      description: 'Optional link when the image is clicked',
+    },
+    {
+      name: 'openInNewTab',
+      title: 'Open in New Tab',
+      type: 'boolean',
+      initialValue: true,
+      hidden: ({parent}) => !parent?.link,
+    },
   ],
   preview: {
     select: {
       title: 'caption',
-      videoType: 'videoType',
-      media: 'poster',
+      alt: 'alt',
+      media: 'image',
     },
-    prepare(selection: any) {
-      const {title, videoType, media} = selection
+    prepare(selection) {
+      const {title, alt, media} = selection
       return {
-        title: title || 'Video',
-        subtitle: `Type: ${videoType || 'Unknown'}`,
-        media: media || '🎬',
+        title: title || alt || 'Image',
+        subtitle: title && alt ? `Alt: ${alt}` : alt ? 'Image' : 'No alt text',
+        media,
       }
     },
   },
