@@ -9,21 +9,23 @@ import customBlock from './objects/customBlock'
 import containerStyle from './objects/containerStyle'
 import animationSettings from './objects/animationSettings'
 
+// The order here is crucial - dependencies must be registered before
+// the types that use them
 export const schemaTypes = [
-  // First register basic types that others depend on
-  animationSettings,
+  // Base types with no dependencies
   containerStyle,
+  animationSettings,
   backgroundSettings,
 
-  // Then register content blocks
+  // Content block types (depend on animation/container styles)
   textBlock,
   imageBlock,
   videoBlock,
   customBlock,
 
-  // Then register section type that uses content blocks
+  // Section type (depends on content blocks)
   storySection,
 
-  // Finally register document types that use sections
+  // Document type (depends on sections)
   story,
 ]
