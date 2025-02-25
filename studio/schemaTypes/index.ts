@@ -10,16 +10,20 @@ import containerStyle from './objects/containerStyle'
 import animationSettings from './objects/animationSettings'
 
 export const schemaTypes = [
-  // Document types
-  story,
-
-  // Object types
-  storySection,
+  // First register basic types that others depend on
+  animationSettings,
+  containerStyle,
   backgroundSettings,
+
+  // Then register content blocks
   textBlock,
   imageBlock,
   videoBlock,
   customBlock,
-  containerStyle,
-  animationSettings,
+
+  // Then register section type that uses content blocks
+  storySection,
+
+  // Finally register document types that use sections
+  story,
 ]
