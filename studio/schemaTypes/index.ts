@@ -10,7 +10,10 @@ import containerStyle from './objects/containerStyle'
 import animationSettings from './objects/animationSettings'
 
 export const schemaTypes = [
+  // Document types
   story,
+
+  // Object types
   storySection,
   backgroundSettings,
   textBlock,
