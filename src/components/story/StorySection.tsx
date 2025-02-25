@@ -3,7 +3,11 @@ import React, { useRef, useEffect } from 'react'
 import { StorySection as StorySectionType, ContentBlock } from '@/types/sanity'
 import Background from './Background'
 import TextBlock from './TextBlock'
+import ImageBlock from './ImageBlock'
+import VideoBlock from './VideoBlock'
+import CustomBlock from './CustomBlock'
 import { twMerge } from 'tailwind-merge'
+import { getAnimationClasses, getAnimationStyles } from '@/lib/animations'
 
 interface StorySectionProps {
     section: StorySectionType
@@ -38,28 +42,19 @@ export default function StorySection({
             case 'textBlock':
                 return <TextBlock key={block._key} block={block} />
 
-            // We'll implement other block types later
-            // For now, we'll just render placeholders
             case 'imageBlock':
-                return (
-                    <div key={block._key} className="p-4 bg-gray-100 dark:bg-gray-800 rounded my-4 mx-auto max-w-2xl">
-                        <p className="text-center">[Image Block - Coming Soon]</p>
-                    </div>
-                )
+                return <ImageBlock key={block._key} block={block} />
 
             case 'videoBlock':
-                return (
-                    <div key={block._key} className="p-4 bg-gray-100 dark:bg-gray-800 rounded my-4 mx-auto max-w-2xl">
-                        <p className="text-center">[Video Block - Coming Soon]</p>
-                    </div>
-                )
+                return <VideoBlock
+                    key={block._key}
+                    block={block}
+                    isActive={isActive}
+                    scrollVideoProgress={scrollVideoProgress}
+                />
 
             case 'customBlock':
-                return (
-                    <div key={block._key} className="p-4 bg-gray-100 dark:bg-gray-800 rounded my-4 mx-auto max-w-2xl">
-                        <p className="text-center">[Custom Block - Coming Soon]</p>
-                    </div>
-                )
+                return <CustomBlock key={block._key} block={block} />
 
             default:
                 // For unknown block types, render a placeholder
